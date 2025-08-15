@@ -20,12 +20,9 @@ from tqdm.auto import tqdm
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description='Evaluate a PLM on the LAMA knowledge probe')
-    parser.add_argument('--input_file', type=str, default="../datasets/Anonymized_bios_dev_with_no_orig_rets_expanded.jsonl",
-                        help='The batch size to use during probing')
-    parser.add_argument('--output_file', type=str, default="../datasets/ColBERT_Performance_dev_no_orig.jsonl",
-                        help='The batch size to use during probing')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input_file', type=str, default="../datasets/Anonymized_bios_dev_with_no_orig_rets_expanded.jsonl")
+    parser.add_argument('--output_file', type=str, default="../datasets/ColBERT_Performance_dev_no_orig.jsonl")
     parser.add_argument("--colbert_model", type=str, default="../models/colbert_wiki_all_mask.bin")
 
     args = parser.parse_args()
