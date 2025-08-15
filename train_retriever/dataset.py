@@ -1,0 +1,40 @@
+import torch
+from torch.utils.data import Dataset
+from smart_open import open
+import json
+import random
+
+
+class Dataset(Dataset):
+
+    def __init__(self, file, any_unmask_prob=0.0, unmask_prob=0.5):
+
+        self.data = []
+        self.any_unmask_prob = any_unmask_prob
+        self.unmask_prob = unmask_prob
+
+        for line in open(file, "r"):
+            self.data.append(json.loads(line))
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        segment = self.data[index]["text"]
+        length_correction = 0
+        seq_to_unmask = random.random() < self.any_unmask_prob
+        for i, mask_index in enumerate(self.data[index]["mask_indices"]):
+            if seq_to_unmask and random.random() < self.unmask_prob:
+                unmask_span = self.data[index]["mask_ents"][i]
+                segment = segment[:mask_index+length_correction] + unmask_span + segment[mask_index+6+length_correction:]
+                length_correction += (len(unmask_span) - 6)
+            else:
+                segment = segment[:mask_index+length_correction] + "[ANON]" + segment[mask_index+6+length_correction:]
+
+        segment = "[Q]" + segment
+        positive_doc = "[D]" + self.data[index]["positive_retrievals"][random.randint(0, len(self.data[index]["positive_retrievals"])-1)]
+        negative_doc = "[D]" + self.data[index]["negative_retrievals"][random.randint(0, len(self.data[index]["negative_retrievals"])-1)]
+
+        labels = torch.zeros(1, dtype=torch.long)
+
+        return segment, positive_doc, negative_doc, labels
