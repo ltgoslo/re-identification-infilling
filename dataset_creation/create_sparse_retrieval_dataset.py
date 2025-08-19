@@ -42,7 +42,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--index', type=str, required=True)
     parser.add_argument('--anonymized_documents', type=str, required=True)
-    parser.add_argument("--ouptut_file", type=str, required=True)
+    parser.add_argument("--output_file", type=str, required=True)
     parser.add_argument("--retrieved_on_unmasked", action="store_true", default=False)
     parser.add_argument("--include_original", action="store_true", help="Whether to keep the original text if retrieved.")
     parser.add_argument("--num_doc_retrieved", type=int, default=100)
