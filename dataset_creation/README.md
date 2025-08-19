@@ -1,0 +1,1 @@
+Using `bio_fetcher.py` gives you the titles of the biography articles, that you can then use to split the Wikipedia dump into biogrpahies and non-biogrphies.
